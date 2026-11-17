@@ -1,0 +1,56 @@
+# Choose meditation only after validating real timing. Paths are relative to this file.
+mode = "signal_only"
+
+[paths]
+data_dir = "data"
+output_dir = "processed"
+participants_csv = "examples/participants.csv"
+
+[channels]
+infer_edf_types = false
+acquisition_reference = "unknown"
+expected_eeg = []  # optional complete list of verified, standardized EEG names
+legacy_mat_enabled = false
+
+[channels.rename]
+# "EEG F3-REF" = "F3"  # use only after confirming the label convention
+
+[channels.channel_types]
+# Trigger = "stim"  # only when the channel is confirmed to hold integer codes
+# Event = "misc"    # example for a non-stim auxiliary channel
+# EOG = "eog"       # only for an actual EOG electrode
+
+[channels.legacy_mat]
+variable = "SIGNAL"
+eeg_names = ["Fp1", "Fp2", "FC5", "FC6", "Fz", "T7", "Cz", "T8", "P7", "P3", "Pz", "P4", "P8", "O1", "Oz", "O2"]
+sfreq = 512
+# Supply verified values before enabling the MATLAB importer.
+eeg_unit = ""
+timestamp_to_seconds = 0
+
+[processing]
+bandpass_hz = [0.5, 41.0]
+target_hz = 256  # 0 retains native rate
+reference = "preserve"  # "average" requires an explicitly reviewed channel set
+montage = ""  # e.g. "standard_1020" after confirming actual electrode locations
+detect_flat_uv = 0.5
+flag_noisy_uv = 150.0  # channel robust spread; flags for review
+bad_channels = []
+interpolate = false
+inspect_ica = false  # inspection and EOG scoring only
+ica_min_seconds = 60
+ica_eog_correlation = 0.8
+reject_peak_uv = 150.0
+reject_flat_uv = 0.5
+
+[stages]
+source = "csv"  # "csv", "annotations", or "triggers"
+provenance = ""  # verified protocol or experiment timing log identifier/version
+csv = "examples/stage_annotations.csv"
+stim_channel = ""
+
+[stages.annotation_map]
+# "Exact acquisition annotation label" = "meditation"
+
+[stages.trigger_pairs]
+# pre_meditation = {start = VERIFIED_START_CODE, end = VERIFIED_END_CODE}
